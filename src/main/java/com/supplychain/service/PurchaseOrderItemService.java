@@ -11,46 +11,46 @@ import java.util.Optional;
 
 @Service
 public class PurchaseOrderItemService {
+private final PurchaseOrderItemRepository purchaseOrderItemRepository;
 
-    private final PurchaseOrderItemRepository purchaseOrderItemRepository;
+public PurchaseOrderItemService(
+        PurchaseOrderItemRepository purchaseOrderItemRepository) {
 
-    public PurchaseOrderItemService(
-            PurchaseOrderItemRepository purchaseOrderItemRepository) {
+    this.purchaseOrderItemRepository = purchaseOrderItemRepository;
+}
 
-        this.purchaseOrderItemRepository = purchaseOrderItemRepository;
-    }
+public PurchaseOrderItem saveItem(PurchaseOrderItem item) {
+    return purchaseOrderItemRepository.save(item);
+}
 
-    public PurchaseOrderItem saveItem(PurchaseOrderItem item) {
-        return purchaseOrderItemRepository.save(item);
-    }
+public List<PurchaseOrderItem> getAllItems() {
+    return purchaseOrderItemRepository.findAll();
+}
 
-    public List<PurchaseOrderItem> getAllItems() {
-        return purchaseOrderItemRepository.findAll();
-    }
+public Optional<PurchaseOrderItem> getItemById(Long id) {
+    return purchaseOrderItemRepository.findById(id);
+}
 
-    public Optional<PurchaseOrderItem> getItemById(Long id) {
-        return purchaseOrderItemRepository.findById(id);
-    }
+public List<PurchaseOrderItem> findByPurchaseOrder(
+        PurchaseOrder purchaseOrder) {
 
-    public List<PurchaseOrderItem> findByPurchaseOrder(
-            PurchaseOrder purchaseOrder) {
+    return purchaseOrderItemRepository.findByPurchaseOrder(
+            purchaseOrder
+    );
+}
 
-        return purchaseOrderItemRepository.findByPurchaseOrder(
-                purchaseOrder
-        );
-    }
+public Optional<PurchaseOrderItem> findByPurchaseOrderAndProduct(
+        PurchaseOrder purchaseOrder,
+        Product product) {
 
-    public Optional<PurchaseOrderItem> findByPurchaseOrderAndProduct(
-            PurchaseOrder purchaseOrder,
-            Product product) {
+    return purchaseOrderItemRepository.findByPurchaseOrderAndProduct(
+            purchaseOrder,
+            product
+    );
+}
 
-        return purchaseOrderItemRepository.findByPurchaseOrderAndProduct(
-                purchaseOrder,
-                product
-        );
-    }
+public void deleteItem(Long id) {
+    purchaseOrderItemRepository.deleteById(id);
+}
 
-    public void deleteItem(Long id) {
-        purchaseOrderItemRepository.deleteById(id);
-    }
 }

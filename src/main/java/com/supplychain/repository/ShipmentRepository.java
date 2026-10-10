@@ -1,6 +1,5 @@
 package com.supplychain.repository;
-
-import com.supplychain.entity.Order;
+import com.supplychain.entity.PurchaseOrder;
 import com.supplychain.entity.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +12,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     boolean existsByShipmentNumber(String shipmentNumber);
 
-    Optional<Shipment> findByOrder(Order order);
+    Optional<Shipment> findByPurchaseOrder(PurchaseOrder purchaseOrder);
 
     List<Shipment> findByStatus(String status);
 }

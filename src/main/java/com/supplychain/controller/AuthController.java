@@ -2,8 +2,11 @@ package com.supplychain.controller;
 
 import com.supplychain.entity.User;
 import com.supplychain.service.AuthService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -38,4 +41,5 @@ public class AuthController {
                 Map.of("token", token)
         );
     }
+    
 }

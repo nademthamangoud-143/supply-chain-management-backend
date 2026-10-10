@@ -39,27 +39,50 @@ public class AuthService {
 
         return userRepository.save(user);
     }
+public String login(String username, String password) {
 
-    public String login(String username, String password) {
+    System.out.println("LOGIN DEBUG: username received = " + username);
+    System.out.println("LOGIN DEBUG: password provided = "
+            + (password != null && !password.isBlank()));
 
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(() ->
-                        new RuntimeException("Invalid username or password")
-                );
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> {
+                System.out.println("LOGIN DEBUG: User not found in database");
+                return new RuntimeException("Invalid username or password");
+            });
 
-        if (!passwordEncoder.matches(
-                password,
-                user.getPassword())) {
+    System.out.println("LOGIN DEBUG: User found in database");
+    System.out.println("LOGIN DEBUG: Stored password hash exists = "
+            + (user.getPassword() != null));
 
-            throw new RuntimeException(
-                    "Invalid username or password"
-            );
-        }
+    boolean passwordMatches = passwordEncoder.matches(
+            password,
+            user.getPassword()
+    );
 
-        return jwtService.generateToken(
-                user.getUsername(),
-                user.getRole()
-        );
+    System.out.println("LOGIN DEBUG: Password matches = "
+            + passwordMatches);
+
+    if (!passwordMatches) {
+        throw new RuntimeException("Invalid username or password");
     }
+
+    return jwtService.generateToken(
+            user.getUsername(),
+            user.getRole()
+    );
+}
+
+    public void resetPassword(String username, String newPassword) {
+
+    User user = userRepository
+            .findByUsername(username)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found")
+            );
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+
+    userRepository.save(user);
+}
 }

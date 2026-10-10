@@ -1,6 +1,6 @@
 package com.supplychain.service;
 
-import com.supplychain.entity.Order;
+import com.supplychain.entity.PurchaseOrder;
 import com.supplychain.entity.Shipment;
 import com.supplychain.repository.ShipmentRepository;
 import org.springframework.stereotype.Service;
@@ -29,22 +29,16 @@ public class ShipmentService {
         return shipmentRepository.findById(id);
     }
 
-    public Optional<Shipment> findByShipmentNumber(
-            String shipmentNumber) {
-
-        return shipmentRepository.findByShipmentNumber(
-                shipmentNumber
-        );
+    public Optional<Shipment> findByShipmentNumber(String shipmentNumber) {
+        return shipmentRepository.findByShipmentNumber(shipmentNumber);
     }
 
     public boolean existsByShipmentNumber(String shipmentNumber) {
-        return shipmentRepository.existsByShipmentNumber(
-                shipmentNumber
-        );
+        return shipmentRepository.existsByShipmentNumber(shipmentNumber);
     }
 
-    public Optional<Shipment> findByOrder(Order order) {
-        return shipmentRepository.findByOrder(order);
+    public Optional<Shipment> findByPurchaseOrder(PurchaseOrder purchaseOrder) {
+        return shipmentRepository.findByPurchaseOrder(purchaseOrder);
     }
 
     public List<Shipment> findByStatus(String status) {

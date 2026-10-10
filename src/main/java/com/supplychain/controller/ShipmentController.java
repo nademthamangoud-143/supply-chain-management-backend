@@ -26,17 +26,41 @@ public ShipmentController(
 }
 
 @PostMapping
-public ResponseEntity<Shipment> create(
-        @RequestBody Shipment value) {
-
-    if (value.getShipmentNumber() != null
-            && service.existsByShipmentNumber(
-                    value.getShipmentNumber())) {
-        return ResponseEntity.badRequest().build();
-    }
-
-    return ResponseEntity.ok(service.saveShipment(value));
+public ResponseEntity<?> create(@RequestBody Shipment value) {
+if (value.getShipmentNumber() == null
+        || value.getShipmentNumber().isBlank()) {
+    return ResponseEntity.badRequest()
+            .body("Shipment number is required.");
 }
+
+if (service.existsByShipmentNumber(value.getShipmentNumber())) {
+    return ResponseEntity.badRequest()
+            .body("Shipment number already exists.");
+}
+
+if (value.getPurchaseOrder() == null
+        || value.getPurchaseOrder().getId() == null) {
+    return ResponseEntity.badRequest()
+            .body("A valid Purchase Order ID is required.");
+}
+
+Optional<PurchaseOrder> purchaseOrder =
+        purchaseOrderService.getPurchaseOrderById(
+                value.getPurchaseOrder().getId());
+
+if (purchaseOrder.isEmpty()) {
+    return ResponseEntity.badRequest()
+            .body("Purchase Order not found.");
+}
+
+value.setPurchaseOrder(purchaseOrder.get());
+
+Shipment saved = service.saveShipment(value);
+
+return ResponseEntity.ok(saved);
+
+}
+
 
 @GetMapping
 public ResponseEntity<List<Shipment>> all() {

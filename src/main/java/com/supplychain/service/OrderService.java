@@ -1,9 +1,13 @@
+
 package com.supplychain.service;
 
 import com.supplychain.entity.Order;
 import com.supplychain.entity.Warehouse;
 import com.supplychain.repository.OrderRepository;
+import com.supplychain.repository.WarehouseRepository;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,12 +16,35 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final WarehouseRepository warehouseRepository;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(
+            OrderRepository orderRepository,
+            WarehouseRepository warehouseRepository) {
+
         this.orderRepository = orderRepository;
+        this.warehouseRepository = warehouseRepository;
     }
 
+    @Transactional
     public Order saveOrder(Order order) {
+
+        if (order.getWarehouse() == null
+                || order.getWarehouse().getId() == null) {
+
+            throw new IllegalArgumentException(
+                    "Please select a warehouse for this order.");
+        }
+
+        Long warehouseId = order.getWarehouse().getId();
+
+        Warehouse warehouse = warehouseRepository.findById(warehouseId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Warehouse with ID " + warehouseId
+                                + " does not exist. Please select a valid warehouse."));
+
+        order.setWarehouse(warehouse);
+
         return orderRepository.save(order);
     }
 

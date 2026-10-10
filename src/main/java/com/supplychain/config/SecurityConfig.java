@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.List;
 
+
 @Configuration
 public class SecurityConfig {
 
@@ -46,12 +47,13 @@ public class SecurityConfig {
 configuration.setAllowedOrigins(
         List.of(
                 "http://localhost:5173",
-                "https://supply-chain-management-frontend-c2yqm4s1h-ntg-f4f6.vercel.app"
+                "https://supply-chain-management-frontend-c2yqm4s1h-ntg-f4f6.vercel.app",
+                "https://supplychainf2-nz4qe004g-ntg-f4f6.vercel.app"
         )
 );
 
         configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         );
 
         configuration.setAllowedHeaders(

@@ -1,3 +1,4 @@
+
 package com.supplychain.config;
 
 import com.supplychain.security.JwtAuthenticationFilter;
@@ -14,12 +15,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
-
 
 @Configuration
 public class SecurityConfig {
@@ -44,22 +43,21 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
-configuration.setAllowedOrigins(
-        List.of(
+
+        configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://supply-chain-management-frontend-c2yqm4s1h-ntg-f4f6.vercel.app",
-                "https://supplychainf2-nz4qe004g-ntg-f4f6.vercel.app"
-        )
-);
+                "https://supplychainf2.vercel.app",
+                "https://supplychainf2-nz4qe004g-ntg-f4f6.vercel.app",
+                "https://supplychainf2-git-main-ntg-f4f6.vercel.app",
+                "https://supplychainf2-nfjifyjv5-ntg-f4f6.vercel.app",
+                "https://supply-chain-management-frontend-c2yqm4s1h-ntg-f4f6.vercel.app"
+        ));
 
-        configuration.setAllowedMethods(
-        List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-        );
+        configuration.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+        ));
 
-        configuration.setAllowedHeaders(
-                List.of("*")
-        );
-
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
@@ -78,24 +76,16 @@ configuration.setAllowedOrigins(
 
         http
                 .csrf(csrf -> csrf.disable())
-
                 .cors(Customizer.withDefaults())
-
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/error"
                         ).permitAll()
-
-                        .requestMatchers("/api/**")
-                        .authenticated()
-
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated()
                 )
-
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
@@ -104,3 +94,4 @@ configuration.setAllowedOrigins(
         return http.build();
     }
 }
+
